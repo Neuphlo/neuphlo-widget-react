@@ -46,9 +46,35 @@ import { openNeuphloWidget } from "@neuphlo/widget-react"
 | Option | Default | Description |
 | --- | --- | --- |
 | `widgetKey` | — | Workspace widget key from Inbox settings → Chat widget |
+| `user` | — | Signed-in user: `{ id, name, email, hash }` |
 | `position` | `"right"` | Launcher corner, `"left"` or `"right"` |
 | `color` | `"#171717"` | Launcher accent color |
 | `appUrl` | Neuphlo cloud | Your app origin for self-hosted installs |
 | `scriptUrl` | `https://get.neuphlo.com/widget.js` | Loader script URL |
 
 The widget unmounts cleanly — the launcher and panel are removed when the component unmounts.
+
+## Identifying users
+
+Pass the signed-in user so conversations are recognized in your inbox:
+
+```tsx
+<NeuphloWidget
+  widgetKey="your-widget-key"
+  user={{ id: user.id, name: user.name, email: user.email, hash: user.neuphloHash }}
+/>
+```
+
+`hash` enables identity verification — compute it **server-side** with the
+widget identity secret from Inbox settings → Chat widget:
+
+```ts
+import { createHmac } from "node:crypto"
+
+const neuphloHash = createHmac("sha256", process.env.NEUPHLO_IDENTITY_SECRET)
+  .update(user.id)
+  .digest("hex")
+```
+
+Workspaces with "Require verified identities" enabled reject identified
+conversations without a valid hash; anonymous visitors are unaffected.
