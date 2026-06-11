@@ -14,9 +14,18 @@ export interface NeuphloWidgetApi {
   destroy: () => void
 }
 
+export interface NeuphloWidgetUser {
+  /** Your product's user id, stored on the conversation. */
+  id?: string
+  name?: string
+  email?: string
+}
+
 export interface NeuphloWidgetOptions {
   /** Workspace widget key from Inbox settings → Chat widget. */
   widgetKey: string
+  /** Identify the signed-in user so conversations are recognized. */
+  user?: NeuphloWidgetUser
   /** Loader script origin. Defaults to the Neuphlo cloud. */
   scriptUrl?: string
   /** Neuphlo app origin, for self-hosted installs. */
@@ -44,6 +53,9 @@ export function loadNeuphloWidget(options: NeuphloWidgetOptions): () => void {
   if (options.appUrl) script.dataset.app = options.appUrl
   if (options.position) script.dataset.position = options.position
   if (options.color) script.dataset.color = options.color
+  if (options.user?.id) script.dataset.userId = options.user.id
+  if (options.user?.name) script.dataset.userName = options.user.name
+  if (options.user?.email) script.dataset.userEmail = options.user.email
   document.body.appendChild(script)
 
   return () => {
@@ -54,10 +66,24 @@ export function loadNeuphloWidget(options: NeuphloWidgetOptions): () => void {
 }
 
 export function useNeuphloWidget(options: NeuphloWidgetOptions): void {
-  const { widgetKey, scriptUrl, appUrl, position, color } = options
+  const { widgetKey, scriptUrl, appUrl, position, color, user } = options
+  const userId = user?.id
+  const userName = user?.name
+  const userEmail = user?.email
   useEffect(
-    () => loadNeuphloWidget({ widgetKey, scriptUrl, appUrl, position, color }),
-    [widgetKey, scriptUrl, appUrl, position, color],
+    () =>
+      loadNeuphloWidget({
+        widgetKey,
+        scriptUrl,
+        appUrl,
+        position,
+        color,
+        user:
+          userId || userName || userEmail
+            ? { id: userId, name: userName, email: userEmail }
+            : undefined,
+      }),
+    [widgetKey, scriptUrl, appUrl, position, color, userId, userName, userEmail],
   )
 }
 
