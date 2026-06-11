@@ -1,7 +1,7 @@
 {
   "name": "@neuphlo/widget-react",
   "version": "0.3.0",
-  "description": "React component for the Neuphlo support chat widget",
+  "description": "React bindings for the Neuphlo Messenger",
   "license": "MIT",
   "repository": {
     "type": "git",

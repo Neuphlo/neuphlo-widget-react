@@ -27,7 +27,7 @@ export interface NeuphloWidgetUser {
 }
 
 export interface NeuphloWidgetOptions {
-  /** Workspace widget key from Inbox settings → Chat widget. */
+  /** Workspace widget key from Inbox settings → Messenger. */
   widgetKey: string
   /** Identify the signed-in user so conversations are recognized. */
   user?: NeuphloWidgetUser

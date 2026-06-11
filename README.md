@@ -1,6 +1,6 @@
 # @neuphlo/widget-react
 
-React bindings for the [Neuphlo](https://neuphlo.com) support chat widget. Renders a floating launcher; conversations land in your Neuphlo inbox with the same draft-and-approve flow as email.
+React bindings for the [Neuphlo](https://neuphlo.com) Messenger. Renders a floating launcher; conversations land in your Neuphlo inbox with the same draft-and-approve flow as email.
 
 ## Install
 
@@ -45,7 +45,7 @@ import { openNeuphloWidget } from "@neuphlo/widget-react"
 
 | Option | Default | Description |
 | --- | --- | --- |
-| `widgetKey` | — | Workspace widget key from Inbox settings → Chat widget |
+| `widgetKey` | — | Workspace widget key from Inbox settings → Messenger |
 | `user` | — | Signed-in user: `{ id, name, email, hash }` |
 | `position` | `"right"` | Launcher corner, `"left"` or `"right"` |
 | `color` | `"#171717"` | Launcher accent color |
@@ -66,7 +66,7 @@ Pass the signed-in user so conversations are recognized in your inbox:
 ```
 
 `hash` enables identity verification — compute it **server-side** with the
-widget identity secret from Inbox settings → Chat widget:
+widget identity secret from Inbox settings → Messenger:
 
 ```ts
 import { createHmac } from "node:crypto"
