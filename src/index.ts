@@ -19,6 +19,11 @@ export interface NeuphloWidgetUser {
   id?: string
   name?: string
   email?: string
+  /**
+   * HMAC-SHA256 of the user id (or email when no id), keyed with your
+   * workspace's widget identity secret. Compute it server-side.
+   */
+  hash?: string
 }
 
 export interface NeuphloWidgetOptions {
@@ -56,6 +61,7 @@ export function loadNeuphloWidget(options: NeuphloWidgetOptions): () => void {
   if (options.user?.id) script.dataset.userId = options.user.id
   if (options.user?.name) script.dataset.userName = options.user.name
   if (options.user?.email) script.dataset.userEmail = options.user.email
+  if (options.user?.hash) script.dataset.userHash = options.user.hash
   document.body.appendChild(script)
 
   return () => {
@@ -70,6 +76,7 @@ export function useNeuphloWidget(options: NeuphloWidgetOptions): void {
   const userId = user?.id
   const userName = user?.name
   const userEmail = user?.email
+  const userHash = user?.hash
   useEffect(
     () =>
       loadNeuphloWidget({
@@ -80,10 +87,20 @@ export function useNeuphloWidget(options: NeuphloWidgetOptions): void {
         color,
         user:
           userId || userName || userEmail
-            ? { id: userId, name: userName, email: userEmail }
+            ? { id: userId, name: userName, email: userEmail, hash: userHash }
             : undefined,
       }),
-    [widgetKey, scriptUrl, appUrl, position, color, userId, userName, userEmail],
+    [
+      widgetKey,
+      scriptUrl,
+      appUrl,
+      position,
+      color,
+      userId,
+      userName,
+      userEmail,
+      userHash,
+    ],
   )
 }
 
